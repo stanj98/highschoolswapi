@@ -1,0 +1,1 @@
+web: gunicorn high_school_swapi.wsgi
