@@ -173,7 +173,7 @@ The REST API to the example app is described below.
         ]
     }
 
-## Feature 2: summarize for a specified resource id
+## Feature 2: get a summarized bio-data for a specified resource id
 
 ### Request
 
