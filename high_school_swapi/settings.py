@@ -147,5 +147,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 
-# CRONJOBS = [('*/1 * * * *', 'spaced_repitition.cron.decrement_days_till_study')]
 CRONJOBS = [('0 * * * *', 'api.general_script.get_swapi')]
