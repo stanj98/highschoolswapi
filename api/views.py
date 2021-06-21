@@ -25,15 +25,15 @@ def swapi_research(request, resource = None, obj_id = None, summarize = None, ge
 
 	if request.method == 'GET':
 		
-		# #delete after and use cron
-		# swapi_api = "https://swapi.dev/api/"
-		# # swapi_api = "https://anapioficeandfire.com/api/"
-		# resources = requests.get(swapi_api)
-		# # redis_instance.set("resources_list", json.dumps(resources.json()), timeout= 3600)
-		# redis_instance.set("resources_list", json.dumps(resources.json()))
+		#delete after and use cron
+		swapi_api = "https://swapi.dev/api/"
+		# swapi_api = "https://anapioficeandfire.com/api/"
+		resources = requests.get(swapi_api)
+		# redis_instance.set("resources_list", json.dumps(resources.json()), timeout= 3600)
+		redis_instance.set("resources_list", json.dumps(resources.json()))
 
 		available_resources = json.loads(redis_instance.get("resources_list")).keys()
-
+		# print(available_resources)
 		error_flag = None
 
 		try:

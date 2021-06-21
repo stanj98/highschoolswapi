@@ -8,12 +8,19 @@ redis_instance = redis.StrictRedis(host=settings.REDIS_HOST, port=settings.REDIS
 #cron script to run after every hour -> delete the existing keys and get up-to-date information
 def get_swapi():
 	try:
-		for key in redis_instance.keys('*'):
-			if redis_instance.ttl(key) == -1:
-				#kill keys after an hour
-				redis_instance.expire(key, 60 * 60)
+		# for key in redis_instance.keys('*'):
+		# 	if redis_instance.ttl(key) == -1:
+		# 		#kill keys after an hour
+		# 		redis_instance.expire(key, 60 * 60)
+		# #delete after and use cron
+		# swapi_api = "https://swapi.dev/api/"
+		# # swapi_api = "https://anapioficeandfire.com/api/"
+		# resources = requests.get(swapi_api)
+		# # redis_instance.set("resources_list", json.dumps(resources.json()), timeout= 3600)
+		# redis_instance.set("resources_list", json.dumps(resources.json()))
 		swapi_api = "https://swapi.dev/api/"
 		resources = requests.get(swapi_api)
-		redis_instance.set("resources_list", json.dumps(resources.json()))
+		if resources.json():
+			redis_instance.set("resources_list", json.dumps(resources.json()))
 	except Exception as e:
 		print(e)

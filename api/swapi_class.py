@@ -33,11 +33,15 @@ class Resource:
 				response = json.loads(redis_instance.get(key))
 				return response
 			else:
+				response = None
 				print(f"{url_path.path}{url_path.query} - get results from remote db")
 				get_searched_data = requests.get(swapi_resource_api)
-				# redis_instance.set(f"{url_path.path}?{url_path.query}", json.dumps(get_searched_data.json()), timeout= 1800)
-				redis_instance.set(f"{url_path.path}?{url_path.query}", json.dumps(get_searched_data.json()))
-				response = get_searched_data.json()
+				if get_searched_data.json():
+					# redis_instance.set(f"{url_path.path}?{url_path.query}", json.dumps(get_searched_data.json()), timeout= 1800)
+					redis_instance.set(f"{url_path.path}?{url_path.query}", json.dumps(get_searched_data.json()))
+					response = get_searched_data.json()
+				else:
+					response = {"message": "Error! No results found"}
 				return response
 		else:
 
@@ -50,7 +54,7 @@ class Resource:
 				# swapi_resource_api = f"https://anapioficeandfire.com/api/{resource}/"
 				searched_resource_data = requests.get(swapi_resource_api)
 
-				if searched_resource_data.json():
+				if not 'detail' in searched_resource_data.json().keys():
 					# redis_instance.set(f"{resource}_data", json.dumps(searched_resource_data.json()), timeout= 3600)
 					redis_instance.set(f"{resource}_data", json.dumps(searched_resource_data.json()))
 					response = searched_resource_data.json()
@@ -80,7 +84,7 @@ class Resource:
 				swapi_resource_api = json.loads(redis_instance.get("resources_list"))[resource]
 				searched_resource_data = requests.get(swapi_resource_api)
 
-				if searched_resource_data.json():
+				if not 'detail' in searched_resource_data.json().keys():
 					resource_report_dict[f"total {resource}"] = searched_resource_data.json()['count']
 				else:
 					continue
@@ -99,7 +103,7 @@ class Resource:
 			swapi_resource_api = f"{json.loads(redis_instance.get('resources_list'))[resource]}{obj_id}/"
 			# swapi_resource_api = f"https://swapi.dev/api/{resource}/{obj_id}/"
 			searched_resource_data = requests.get(swapi_resource_api)
-			if searched_resource_data.json():
+			if not 'detail' in searched_resource_data.json().keys():
 				# redis_instance.set(f"{resource}_{obj_id}_data", json.dumps(searched_resource_data.json()), timeout= 3600)
 				redis_instance.set(f"{resource}_{obj_id}_data", json.dumps(searched_resource_data.json()))
 				response = searched_resource_data.json()
@@ -124,8 +128,9 @@ class Resource:
 			print(f"get {resource} {obj_id} data from remote dddDB")
 			swapi_resource_api = f"{json.loads(redis_instance.get('resources_list'))[resource]}{obj_id}/"
 			# swapi_resource_api = f"https://swapi.dev/api/{resource}/{obj_id}/"
+			print(swapi_resource_api)
 			searched_resource_data = requests.get(swapi_resource_api)
-			if searched_resource_data.json():
+			if not 'detail' in searched_resource_data.json().keys():
 				json_data = searched_resource_data.json()
 				# redis_instance.set(f"{resource}_{obj_id}_data", json.dumps(searched_resource_data.json()), timeout= 3600)
 				redis_instance.set(f"{resource}_{obj_id}_data", json.dumps(searched_resource_data.json()))
