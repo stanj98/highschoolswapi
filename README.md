@@ -29,7 +29,7 @@ API to an existing API resource called SWAPI ( STAR WARS API - https://swapi.dev
 
 ## Run the Django server
 
-    python manage.py crontab add
+    python manage.py runserver
 
 The REST API to the example app is described below.
 
@@ -199,7 +199,7 @@ The REST API to the example app is described below.
 
 `GET /api/total_count/`
 
-    curl -i -H 'Accept: application/json' -X PUT -d 'status=changed3' http://localhost:7000/thing/1
+    curl -i -H 'Accept: application/json' http://localhost:8000/api/total_count/
 
 ### Response
 
